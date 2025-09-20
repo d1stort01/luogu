@@ -1,57 +1,37 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 
-struct node {
-    int parent;
-    int left_child, right_child;
-} nodes[1000];
+struct Node {
+    bool valid;
+} nodes[1 << 11];
 
-int n;
-int x, y;
-int x_depth, y_depth;
-int level[1000];
-int depth, width;
+int m, n;
 
-void dfs(int node, int lv) {
-    if (!node) {
+void trav(int n, int lv, bool b) {
+    if (lv > m) {
+        nodes[n].valid = false;
         return;
     }
-    level[lv]++;
-    if (lv > depth) {
-        depth = lv;
-    }
-    if (node == x) {
-        x_depth = lv;
-    }
-    if (node == y) {
-        y_depth = lv;
-    }
-    dfs(nodes[node].left_child, lv + 1);
-    dfs(nodes[node].right_child, lv + 1);
+    nodes[n].valid = b;
+    trav(n << 1, lv + 1, b);
+    trav((n << 1) + 1, lv + 1, b);
 }
 
-
 int main() {
-    cin >> n;
-    for (int i = 0; i < n - 1; i++) {
-        int parent, child;
-        cin >> parent >> child;
-        if (!nodes[parent].left_child) {
-            nodes[parent].left_child = child;
-        } else {
-            nodes[parent].right_child = child;
-        }
-        nodes[child].parent = parent;
+    cin >> m >> n;
+    trav(1, 1, true);
+    for (int i = 0; i < n; i++) {
+        int p, q;
+        cin >> p >> q;
+        trav((1 << (p - 1)) + q - 1, q, false);
     }
-    cin >> x >> y;
-    dfs(1, 1);
-    int lv = 1;
-    while (level[lv] != 0) {
-        if (level[lv] > width) {
-            width = level[lv];
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < (1 << i); j++) {
+            cout << nodes[(1 << i) + j].valid << " ";
         }
-        lv++;
+        cout << '\n';
     }
-    cout << depth << '\n' << width << '\n' << (x_depth - 1) * 2 + (y_depth - 1);
+
     return 0;
 }
