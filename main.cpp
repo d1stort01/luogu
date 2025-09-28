@@ -19,7 +19,6 @@ void trav(int n, int lv, bool b) {
 
 int main() {
     cin >> m >> n;
-
     trav(1, 1, true);
 
     for (int i = 0; i < n; i++) {
