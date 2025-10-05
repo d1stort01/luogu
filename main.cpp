@@ -14,9 +14,6 @@ class DisjointSets {
     }
 
     int find(int x) { 
-        if(x >= parents.size()) {
-            return x;
-        }
         return parents[x] == x ? x : (parents[x] = find(parents[x]));
     }
 
@@ -40,9 +37,9 @@ class DisjointSets {
 };
 
 int main() {
+    DisjointSets ds(5001);
     int n, m, p;
     cin >> n >> m >> p;
-    DisjointSets ds(n);
     while(m--) {
         int mi, mj;
         cin >> mi >> mj;
